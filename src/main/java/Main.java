@@ -1,220 +1,244 @@
 /*
- * Task5: Получение списка вакансий с hh по определенному фильтру в удобочитаемом виде
- * Данные сохраняются в .txt файл, а так же встраиваются в html страницу со стилями
- * для удобочитаемого вида
- */
+
+oo     oo     Учебный проект "VacanciesGrabber"
+o       o
+o   o   o     Daniil Safonov
+o       o     daniil.safonov@gmail.com
+oo     oo     2018
+
+Maven: JSOUP, GSON
+
+*/
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
+import java.lang.Integer;
 
 public class Main {
-    public static void main(String args[]) {
-        String request = null; // Запрос к серверу
-        Connection.Response data = null; // Ответ сервера
 
-        request = chooseRequest(null); // Определить запрос
-        data = connectionAndGetData(request); // Подключиться и получить данные
+    final static private Scanner in = new Scanner(System.in); //Объект для ввода с консоли
 
-        generateHtmlPage(data.body()); // Сгенерировать HTML страницу с полученными данными
+    public static void main(String[] args) {
+        //Приветсвенное сообщение
+        System.out.println("********************************************");
+        System.out.println("VacanciesGrabber - автоматическая агрегация ");
+        System.out.println("и выдача в удобочитаемом формате вакансий   ");
+        System.out.println("для начинающего айтишника                   ");
+        System.out.println("********************************************");
+
+        //Проверка наличия входных параметров
+        //Входной параметр "-refresh" - обновить данные по запросам из файла и сгенерировать ответ
+        //Входной параметр "-new" - создать новый набор параметров и сгенерировать ответ
+        //Входного параметра нет или он не соответсвует существующим - вывести справку
+        /* REFRESH */
+
+        /* NEW */
+        List<List<VacancyGiver>> dataChannels = null; //Список запросов к каналам данных
+
+        dataChannels = selectChannels(); //Выбор используемых для сбора данных каналов пользователем
+
+        dataChannels = generateRequest(dataChannels); //Создание запросов для каждого из выбранных каналов пользователем
+        printCreatedRequests(dataChannels); //Вывести список каналов и запросов
+
+        getData(dataChannels); //Получить данные по каждой из вакансий
+
+        generateExportPage(dataChannels); //Сгенерировать html страницу с данными из списка
     }
 
-    // TODO: переделать метод
-    // Определить запрос для получения данных
-    public static String chooseRequest(int args[]) {
-        String baseRequest = "/vacancies?area=1"; // Вакансии Москвы
+    //Выбор используемых для сбора данных каналов
+    public static List<List<VacancyGiver>> selectChannels() {
+        List<List<VacancyGiver>> dataChannels = new ArrayList<List<VacancyGiver>>();
 
-        if (args == null || args.length != 6) {
-            System.out.println(
-                    "Параметры не были заданы или заданы некорректно, используем шаблон: Java, нет опыта, стажировка.\n");
-            // Java, нет опыта, стажировка
-            args = new int[6];
-            args[0] = 1;
-            args[1] = 1;
-            args[2] = 1;
-            args[3] = 0;
-            args[4] = 0;
-            args[5] = 0;
-        }
+        System.out.print("\n");
+        System.out.println("Выберите набор каналов данных, в которых будет производится поиск вакансий:");
+        System.out.println("1 - Добавить все");
+        System.out.println("2 - HeadHunter");
+        System.out.println("Ввод флагов в формате 0 1 2 0, где 0 - канал не будет создан, n - количество запросов к каналу ");
+        System.out.print("Ввод > ");
 
-        /*
-         * Параметры генератора запросов
-         *
-         * Поисковой запрос: java, тестировщик args[0] Опыт работы: нет опыта, от 1 года
-         * до 3-х лет args[1] Тип занятости: стажировка, частичная занятость args[2]
-         * График работы: гибкий график args[3] Профобласть: начало карьеры args[4]
-         * Зарплата: указана args[5]
-         */
+        int input = 0; //Введенное пользователем число
+        boolean somethingSelected = false; //Выбран ли хотя бы один канал
+        for (int i = 0; i < 2; i++) {
+            if (in.hasNextInt()) {
+                //В потоке ввода есть/появилось целое число
+                input = in.nextInt(); //Записываем число в массив
+                //Необходимо создать канал
+                if (input > 0) {
 
-        // Формирование строки запроса
-        if (args[0] == 1) {
-            // Java
-            baseRequest += "&text=java";
-        } else if (args[0] == 2) {
-            // Тестировщик
-            baseRequest += "&text=тестировщик";
-        }
+                    somethingSelected = true; //Хотя бы один канал выбран
+                    System.out.print("\n"); //Перевод каретки
 
-        if (args[1] == 1) {
-            // Нет опыта
-            baseRequest += "&experience=noExperience";
-        } else if (args[1] == 2) {
-            // От 1 года до 3-х лет
-            baseRequest += "&experience=between1And3";
-        }
+                    //Порядковый номер флага
+                    switch (i) {
+                        case 0:
+                            //Добавить все
+                            System.out.println("Добавить все каналы..");
+                            dataChannels.add(new ArrayList<VacancyGiver>()); //Добавить канал HH
+                            //dataChannels.add(new ArrayList<VacancyGiver>()); //Добавить канал ???
 
-        if (args[2] == 1) {
-            // Стажировка
-            baseRequest += "&employment=probation";
-        } else if (args[2] == 2) {
-            // Частичная занятость
-            baseRequest += "&employment=part";
-        }
+                            //Создание нужного числа запросов к каналу
+                            for (int j = 0; j < input; j++) {
+                                dataChannels.get(dataChannels.size() - 1).add(new DataChannelHH()); //Добавляем пустой запрос
+                                System.out.println("HeadHunter" + (j + 1));
+                                System.out.println("???" + (j + 1));
+                            }
+                            return dataChannels; //Вовзрат созданного списка списков
+                        case 1:
+                            //Добавить HH
+                            dataChannels.add(new ArrayList<VacancyGiver>()); //Добавить HH
 
-        if (args[3] == 1) {
-            // Гибкий график
-            baseRequest += "&schedule=flexible";
-        }
-
-        if (args[4] == 1) {
-            // Начало карьеры
-            baseRequest += "&specialization=15";
-        }
-
-        if (args[5] == 1) {
-            // Зарплата указана
-            baseRequest += "&only_with_salary=true";
-        }
-
-        return baseRequest;
-    }
-
-    // Подключиться и получить данные
-    public static Connection.Response connectionAndGetData(String request) {
-        String baseURL = "https://api.hh.ru"; // Базовый адрес для всех запросов
-        Connection.Response data = null; // Ответ сервера
-
-        try {
-            // Запрос к API
-            data = Jsoup.connect(baseURL + request)
-                    .userAgent("Mozilla/5.0 (Windows NT 6.1; rv:40.0) Gecko/20100101 Firefox/40.0")
-                    .ignoreContentType(true) // Игнорируем, что это не html/xml
-                    .referrer("http://www.google.com").followRedirects(true).timeout(10000).execute();
-
-            if (data.statusCode() == 200) {
-                System.out.println("Запрос успешно выполнен! Код 200.\n");
-            } else {
-                // TODO: Какие еще коды при успешном запросе API может выдавать и нужна ли эта
-                // обработка? Как вообще корректно обрабатывать и выводить коды при неулачном
-                // соединении?
-                System.out.println("При выполнении запроса возникла ошибка: " + data.statusCode() + "\n");
-            }
-        } catch (IOException e) {
-            // Возникла ошибка
-            System.out.println("При соединении возникла ошибка!\n");
-            e.printStackTrace();
-        }
-
-        return data;
-    }
-
-    // Спарсить данные с полученного объекта json
-    public static Vacancy[] parseData(String data) {
-        JsonObject jsonObjectData = new Gson().fromJson(data, JsonObject.class); // Объект JSON с сырыми данными
-        JsonArray jsonArrayData = jsonObjectData.getAsJsonArray("items"); // Массив элементов с сырыми данными
-
-        Vacancy[] vacancies = new Vacancy[jsonArrayData.size()]; // Массив объектов Vacancy с данными по вакансиям
-
-        JsonObject jsonSalary = null; // Объект JSON для хранения зарплаты
-        JsonObject jsonEmployer = null; // Объект JSON для хранения работодателя
-        JsonObject jsonDescription = null; // Объект JSON для хранения краткого описания вакансии
-        String salary = null; // Строка с зарплатой
-        String description = null; // Строка с кратким описанием вакансии
-
-        for (int i = 0; i < jsonArrayData.size(); i++) {
-            jsonObjectData = (JsonObject) jsonArrayData.get(i); // Записываем элемент массива в json объект
-
-            // Зарплата
-            if (!jsonObjectData.get("salary").isJsonNull()) {
-                jsonSalary = jsonObjectData.get("salary").getAsJsonObject(); // Объект с описанием зарплаты
-                // Формирование строки зарплаты
-                if (!jsonSalary.get("from").isJsonNull()) {
-                    salary = "от " + jsonSalary.get("from").getAsString();
-                }
-                if (!jsonSalary.get("to").isJsonNull()) {
-                    salary = salary + " до " + jsonSalary.get("to").getAsString();
-                }
-                if (!jsonSalary.get("currency").isJsonNull()) {
-                    salary = salary + " " + jsonSalary.get("currency").getAsString();
-                }
-                if (!jsonSalary.get("gross").isJsonNull()) {
-                    if (jsonSalary.get("gross").getAsString() == "true") {
-                        salary = salary + " до вычета НДФЛ";
-                    } else {
-                        salary = salary + " на руки";
+                            //Создание нужного числа запросов к каналу
+                            for (int j = 0; j < input; j++) {
+                                dataChannels.get(dataChannels.size() - 1).add(new DataChannelHH()); //Добавляем пустой запрос
+                                System.out.println("HeadHunter" + (j + 1));
+                            }
+                            System.out.println("Добавлен HeadHunter");
+                            break;
                     }
                 }
-            } else {
-                salary = "Не указана";
             }
-
-            // Работодатель
-            if (!jsonObjectData.get("employer").isJsonNull()) {
-                jsonEmployer = jsonObjectData.get("employer").getAsJsonObject(); // Объект с описанием работодателя
-            }
-
-            // Описание
-            if (!jsonObjectData.get("snippet").isJsonNull()) {
-                jsonDescription = jsonObjectData.get("snippet").getAsJsonObject(); // Объект с кратким описанием
-                // вакансии
-                if (!jsonDescription.get("requirement").isJsonNull()) {
-                    description = jsonDescription.get("requirement").getAsString();
-                }
-                if (!jsonDescription.get("responsibility").isJsonNull()) {
-                    description = description + "<br/><br/>" + jsonDescription.get("responsibility").getAsString();
-                }
-            }
-
-            // Запись полученных данных в элемент массива
-            vacancies[i] = new Vacancy(jsonObjectData.get("id").getAsInt(), jsonObjectData.get("name").getAsString(),
-                    salary, jsonEmployer.get("name").getAsString(), description);
-
         }
 
-        return vacancies;
+        //Не выбран ни один канал
+        if (somethingSelected == false) {
+            System.out.print("\n");
+            System.out.println("Не выбран ни один канал для сбора вакансий!");
+            System.out.println("Завершение программы..");
+            System.exit(0);
+        }
+
+        return dataChannels; //Вовзрат созданного списка списков
     }
 
-    // Сгенерировать select-идентификаторы для вставки данных в HTML-шаблон
-    public static VacancyGeneratedSelectors[] generateSelectors(Vacancy[] vacancies, int vacancyCount) {
-        // Массив с идентификаторами для select
-        VacancyGeneratedSelectors[] vacancyGeneratedSelectors = new VacancyGeneratedSelectors[vacancyCount + 1];
+    //Ввод полльзователем запроса к каналу данных
+    public static List<List<VacancyGiver>> generateRequest(List<List<VacancyGiver>> dataChannels) {
+        String input; //Введенная пользователем строка
+        String inputElements[]; //Разбитая на элементы строка
 
-        // Генерируем идентификаторы для выбора блоков во время вставки
-        for (int i = 1; i <= vacancyCount; i++) {
-            vacancyGeneratedSelectors[i] = new VacancyGeneratedSelectors(i, "#" + i + " .header", "#" + i + " .salary",
-                    "#" + i + " .employer", "#" + i + " .description-text", "#" + i + " .vacancyLink");
+        //Цикл для обхода списка каналов
+        for (int i = 0; i < dataChannels.size(); i++) {
+
+            //Проверка списка запросов на принадлежность к одному из каналов
+            if (dataChannels.get(i).get(0) instanceof DataChannelHH) {
+                //Канал данных Head Hunter
+                System.out.print("\n");
+                System.out.println("Канал данных Head Hunter - запросов: " + dataChannels.get(i).size());
+
+                //Цикл для обхода списка запросов внутри канала
+                for (int j = 0; j < dataChannels.get(i).size(); j++) {
+                    System.out.print("\n");
+                    System.out.println("Сформируйте запрос в формате: java 0 0 0 0 0");
+                    System.out.print("\n");
+                    System.out.println("1. Ключевое слово");
+                    System.out.println("2. Опыт работы: 0 - без опыта, 1 - от 1 до 3-х лет");
+                    System.out.println("3. Тип занятости: 0 - стажировка, 1 - частичная занятость");
+                    System.out.println("4. График работы: 0 - гибкий, 1 - удаленная работа, 2 - полный рабочий день");
+                    System.out.println("5. Начало карьеры: 0 - не важно, 1 - да");
+                    System.out.println("6. Зарплата указана: 0 - не важно, 1 - да");
+                    System.out.print("Запрос > ");
+
+                    if (j == 0) {
+                        in.nextLine(); //Костыль
+                    }
+                    input = in.nextLine(); //Считать строку
+
+                    //Разделить введенную строку по пробелам на массив подстрок
+                    inputElements = input.split("\\s+");
+
+                    //Проверка формата введенной строки
+                    if (inputElements.length == 6 && Integer.class.isInstance(Integer.parseInt(inputElements[1])) && Integer.class.isInstance(Integer.parseInt(inputElements[2])) && Integer.class.isInstance(Integer.parseInt(inputElements[3])) && Integer.class.isInstance(Integer.parseInt(inputElements[4])) && Integer.class.isInstance(Integer.parseInt(inputElements[5]))) {
+                        //Приведение числовых выражений к строковым
+                        if (inputElements[4].equals("1")) {
+                            inputElements[4] = "true";
+                        } else {
+                            inputElements[4] = "false";
+                        }
+                        if (inputElements[5].equals("1")) {
+                            inputElements[5] = "true";
+                        } else {
+                            inputElements[5] = "false";
+                        }
+
+                        //Передача значений в метод генерации данных запроса
+                        dataChannels.get(i).get(j).newRequest(inputElements[0], Integer.parseInt(inputElements[1]), Integer.parseInt(inputElements[2]), Integer.parseInt(inputElements[3]), Boolean.parseBoolean(inputElements[4]), Boolean.parseBoolean(inputElements[5]));
+                        if (dataChannels.get(i).get(j).isRequestExist()) {
+                            System.out.println("OK");
+                        } else {
+                            System.out.print("\n");
+                            System.out.println("Запрос не удалось сформировать!");
+                            System.out.println("Завершение программы..");
+                            System.exit(0);
+                        }
+                    } else {
+                        System.out.print("\n");
+                        System.out.println("Формат переданного запроса не соответсвует шаблону!");
+                        System.out.println("Завершение программы..");
+                        System.exit(0);
+                    }
+                }
+            } else if (false) {
+                //Канал данных ???
+            }
         }
+        return dataChannels;
+    }
 
-        return vacancyGeneratedSelectors;
+    //Вывести список каналов и запросов
+    public static void printCreatedRequests(List<List<VacancyGiver>> dataChannels) {
+        System.out.print("\n");
+        System.out.print("Созданные запросы:");
+
+        //Цикл для обхода списка списков каналов
+        for (int i = 0; i < dataChannels.size(); i++) {
+            //Проверка списка запросов на принадлежность к одному из каналов
+            if (dataChannels.get(i).get(0) instanceof DataChannelHH) {
+                //Канал данных Head Hunter
+                System.out.print("\n");
+                System.out.println("Канал данных Head Hunter - запросов: " + dataChannels.get(i).size());
+            } else if (false) {
+                //Канал данных ???
+            }
+
+            //Цикл для обхода списка запросов внутри канала
+            for (int j = 0; j < dataChannels.get(i).size(); j++) {
+                System.out.println(dataChannels.get(i).get(j).getRequest());
+            }
+        }
+    }
+
+    //Получить собранные и обработанные даннные
+    public static void getData(List<List<VacancyGiver>> dataChannels) {
+        //Цикл для обхода списка списков каналов
+        for (int i = 0; i < dataChannels.size(); i++) {
+            //Цикл для обхода списка запросов внутри канала
+            for (int j = 0; j < dataChannels.get(i).size(); j++) {
+                //Получить список вакансий для данного запроса
+                dataChannels.get(i).get(j).getData();
+            }
+        }
+    }
+
+    //Сгенерировать html страницу с данными из списка
+    public static void generateExportPage(List<List<VacancyGiver>> vacancies) {
+        System.out.println("Генерация html-страницы..");
+        Document page = loadExportPageTemplate(); // Загрузить шаблон HTML-страницы
+        insertDataToPage(page, vacancies); // Произвести вставку данных в поля HTML-шаблона
     }
 
     // Загрузить шаблон HTML-страницы
     public static Document loadExportPageTemplate() {
         Document page = null;
 
-        File pageFile = new File("./src/main/resources/vacancies_template.html"); // Пробуем открыть файл
+        File pageFile = new File("./src/main/resources/VacancyGrabberTemplate.html"); // Пробуем открыть файл
 
         if (pageFile.isFile()) {
             // Файл существует
@@ -246,61 +270,86 @@ public class Main {
     }
 
     // Произвести вставку данных в поля HTML-шаблона
-    public static void insertDataToPage(Document page, Vacancy[] vacancies,
-                                        VacancyGeneratedSelectors[] vacancyGeneratedSelectors) {
-        Element templateElement; // Элемент шаблона, в который производится вставка
-        Element blocksContainerElement; //Элемент шаблона - контейнер блоков вакансий
-        int vacanciesCount = vacancies.length; //Количество найденных вакансий
+    public static void insertDataToPage(Document page, List<List<VacancyGiver>> vacanciesAndChannels) {
+        String request = "", channel = ""; //Текущие запрос и канал
+        String baseSelector = null; //Базовый селектор для текущего блока
+        int vacanciesCount = 0, headersCount = 0; //Счетчики вакансий и блоков вакансий (для #id)
+        List <Vacancy> vacancyList = new ArrayList<Vacancy>(); //Список найденных вакансий
 
-        // Добавить данные в блок секции
-        templateElement = page.select(".section .request").first();
-        templateElement.html("ТЕКСТ ЗАПРОСА"); // TODO: передать строку запроса
+        //Элементы страницы
+        Element blockVacancyTemplate = page.selectFirst(".block#0"); //Шаблон блока вакансии
 
-        templateElement = page.select(".section .vacancies_count").first();
-        templateElement.html(Integer.toString(vacanciesCount) + " вакансий найдено");
+        Element vacanciesBlockTemplate = page.selectFirst(".vacanciesBlock"); //Шаблон блока вакансий
+        vacanciesBlockTemplate.select(".blocks").empty(); //Очистка списка вакансий
 
-        //Создание блоков для вакансий
-        if(vacanciesCount != 0) {
-            //Количество вакансий больше 0
+        Element insertBuff = page.clone(); //Буфер для вставки
+        insertBuff.empty(); //Очистка буфера
 
-            //Контейнер с блоками
-            blocksContainerElement = page.select(".blocks").first();
-            //Контейнер с шаблонным блоком
-            templateElement = page.select(".block#1").first();
-
-            //Создаем необходимое количество блоков (id начинается с 1)
-            for(int i = 2; i <= vacanciesCount; i++) {
-                //Изменить id блока и добавить копию блока с другим id
-                blocksContainerElement.append(templateElement.attr("id", Integer.toString(i)).toString());
-            }
-            templateElement.attr("id", Integer.toString(1)); //TODO: это нужно или нет?
-
-            // Проходим по всему массиву селекторов и заполняем поля данными
-            for (int i = 1; i <= vacancyGeneratedSelectors.length - 1; i++) {
-                // Заголовок
-                templateElement = page.select(vacancyGeneratedSelectors[i].getHeader()).first();
-                templateElement.html(vacancies[i - 1].getName());
-
-                // Зарплата
-                templateElement = page.select(vacancyGeneratedSelectors[i].getSalary()).first();
-                templateElement.html(vacancies[i - 1].getSalary());
-
-                // Работодатель
-                templateElement = page.select(vacancyGeneratedSelectors[i].getEmployer()).first();
-                templateElement.html("<b>" + vacancies[i - 1].getEmployer() + "</b>");
-
-                // Описание
-                templateElement = page.select(vacancyGeneratedSelectors[i].getDescription()).first();
-                templateElement.html(vacancies[i - 1].getDescription());
-
-                // Ссылка на вакансию
-                templateElement = page.select(vacancyGeneratedSelectors[i].getLink()).first();
-                templateElement.attr("href", "https://hh.ru/vacancy/" + vacancies[i - 1].id);
-            }
-
-            //Сохранение сгенерированной страницы в файл
-            savePageToFile(page);
+        //Проверка получения элементов шаблона программой
+        if (vacanciesBlockTemplate == null || blockVacancyTemplate == null) {
+            //Файл шаблона поврежден!
+            System.out.println("Файл шаблона поврежден!");
+            System.out.println("Завершение программы..");
+            System.exit(0);
         }
+
+        //Удаление блоков шаблона
+        page.selectFirst(".main-wrapper").empty(); //Удаляет дочерние элементы для .main-wrapper
+
+        //Цикл для обхода списка списков каналов
+        for (int i = 0; i < vacanciesAndChannels.size(); i++) {
+            //Цикл для обхода списка запросов внутри канала
+            for (int j = 0; j < vacanciesAndChannels.get(i).size(); j++) {
+                channel = vacanciesAndChannels.get(i).get(j).getChannel(); //Получить канал данных
+                request = vacanciesAndChannels.get(i).get(j).getRequest(); //Получить запрос к каналу данных
+                vacancyList = vacanciesAndChannels.get(i).get(j).getData(); //Получить список вакансий
+
+                //Генерация блока вакансий (шапки)
+                headersCount++; //Увеличение счетчика блоков вакансий
+                //Вставка в буфер шаблона шапки с нужным id
+                if(insertBuff.toString().length() == 0){
+                    //Вставка в корень .main-wrapper
+                    insertBuff.html(vacanciesBlockTemplate.attr("id", Integer.toString(headersCount)).toString());
+                } else{
+                    //Вставка после последнего блока вакансий
+                    insertBuff.select(".vacanciesBlock").last().after(vacanciesBlockTemplate.attr("id", Integer.toString(headersCount)).toString());
+                }
+
+                //Вставка данных в шаблон
+                //Вставка канала и запроса в блок шапки
+                insertBuff.select(".vacanciesBlock#" + Integer.toString(headersCount) + " .section" + " .channel").html(channel + ": ");
+                insertBuff.select(".vacanciesBlock#" + Integer.toString(headersCount) + " .section" + " .request").html(request);
+
+                //Вставка количества вакансий в блок шапки
+                insertBuff.select(".vacanciesBlock#" + Integer.toString(headersCount) + " .section" + " .vacancies_count").html("Найдено вакансий: " + Integer.toString(vacancyList.size()));
+
+                //Генерация блоков списка вакансий
+                //Обход списка вакансий
+                for(int k = 0; k < vacancyList.size(); k++){
+                    vacanciesCount++; //Увеличение счетчика вакансий
+                    //Вставка в буфер шаблона вакансии с нужным id
+                    insertBuff.select(".vacanciesBlock#" + Integer.toString(headersCount) + " .blocks").append(blockVacancyTemplate.attr("id", Integer.toString(vacanciesCount)).toString());
+                    //Вставка данных в шаблон
+                    //Название
+                    insertBuff.select(".block#" + Integer.toString(vacanciesCount) + " .header").html(vacancyList.get(k).getName());
+                    //Компания
+                    insertBuff.select(".block#" + Integer.toString(vacanciesCount) + " .employer").html(vacancyList.get(k).getEmployer());
+                    //Зарплата
+                    insertBuff.select(".block#" + Integer.toString(vacanciesCount) + " .salary").html(vacancyList.get(k).getSalary());
+                    //Описание
+                    insertBuff.select(".block#" + Integer.toString(vacanciesCount) + " .description-text").html(vacancyList.get(k).getDescription());
+                    //Ссылка
+                    insertBuff.select(".block#" + Integer.toString(vacanciesCount) + " .link").attr("href", vacancyList.get(k).getLink());
+                }
+
+            }
+        }
+
+        //Вставка буфера
+        page.select(".main-wrapper").html(insertBuff.toString());
+
+        //Сохранение сгенерированной страницы в файл
+        savePageToFile(page);
     }
 
     // Сохранить страницу в файл
@@ -332,111 +381,25 @@ public class Main {
         }
     }
 
-    // Сгенерировать HTML страницу с полученными данными
-    public static void generateHtmlPage(String data) {
-        // Спарсить данные с полученного объекта json
-        Vacancy[] vacancies = parseData(data);
-        // Сгенерировать select-идентификаторы для вставки данных в HTML-шаблон
-        VacancyGeneratedSelectors[] vacancyGeneratedSelectors = generateSelectors(vacancies, vacancies.length);
-        // Загрузить шаблон HTML-страницы
-        Document page = loadExportPageTemplate();
-        // Произвести вставку данных в поля HTML-шаблона
-        insertDataToPage(page, vacancies, vacancyGeneratedSelectors);
-    }
-}
-
-//Класс для описания вакансии
-class Vacancy {
-    int id; // Идентификатор
-    String name; // Название
-    String salary; // Зарплата
-    String employer; // Работодатель
-    String description; // Описание
-
-    // Конструктор класса
-    public Vacancy(int id, String name, String salary, String employer, String description) {
-        this.id = id;
-        this.name = name;
-        this.salary = salary;
-        this.employer = employer;
-        this.description = description;
-    }
-
-    // Методы возврата полей объекта
-    public int getID() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getSalary() {
-        return salary;
-    }
-
-    public String getEmployer() {
-        return employer;
-    }
-
-    public String getDescription() {
-        return description;
-    }
 
 }
 
-//Класс для описания блока вакансии в генерируемом HTML файле
-class VacancyGeneratedSelectors {
-    int idSelector; // id блока
-    String headerSelector; // selector поля названия вакансии
-    String salarySelector; // selector поля зарплаты
-    String employerSelector; // selector поля работодателя
-    String descriptionSelector; // selector поля описания
-    String vacancyLinkSelector; // selector поля ссылки на вакансию
+//TODO: исправить фильтры поиска вакансий, поправить выравнимание ссылки на вакансию
+//TODO: УБРАТЬ ФЛАГ "ГИБКИЙ ГРАФИК"
+//TODO: общая шапка для статистики по найденным вакансиям + дата и время обновления
 
-    // Конструктор класса
-    VacancyGeneratedSelectors(int idSelector, String headerSelector, String salarySelector, String employerSelector,
-                              String descriptionSelector, String vacancyLinkSelector) {
-        this.idSelector = idSelector;
-        this.headerSelector = headerSelector;
-        this.salarySelector = salarySelector;
-        this.employerSelector = employerSelector;
-        this.descriptionSelector = descriptionSelector;
-        this.vacancyLinkSelector = vacancyLinkSelector;
-    }
-
-    // Методы возврата полей объекта
-    public int getID() {
-        return idSelector;
-    }
-
-    public String getHeader() {
-        return headerSelector;
-    }
-
-    public String getSalary() {
-        return salarySelector;
-    }
-
-    public String getEmployer() {
-        return employerSelector;
-    }
-
-    public String getDescription() {
-        return descriptionSelector;
-    }
-
-    public String getLink() {
-        return vacancyLinkSelector;
-    }
-}
-
+//TODO: "найдено вакансий" - жирным
+//TODO: ОБРАБОТКА ОТСУТСВИЯ ВАКАНСИЙ ПО ЗАПРОСУ
+//TODO: ОБРАБОТКА СИТУАЦИЙ ОТСТУСТВИЯ ДАННЫХ (НЕТ СОЕДИНЕНИЯ ИЛИ ЕЩЕ ЧТО)
+//TODO: ПЕРЕПИСАТЬ МЕТОД getData (один метод тупо отдает список, а другой - получает и обрабатывает данные)
+//TODO: поправить порядок формирования запроса для HH, чтобы было как на сайте
+//TODO: поправить вывод в консоль
+//TODO: файл конфига, в котором указан путь для экспортируемого файла и файла с предыдущим набором запрсов и тд
+//TODO: выводить количество найденных вакансий по каждому из запросов и общее количество вакансий в консоль
+//TODO: Вывести абсолютный адрес сгенерированной страницы
 //TODO: НЕТ ССЫЛКИ
-//TODO: УБИРАТЬ ЛИ тег хайлайт?
-//TODO: массив vacancyGeneratedSelectors можно заменить одним объектом, каждый раз конкатенирую #id и один из полей объекта
 //TODO: Показывать адрес компании на карте
 //TODO: Указывать станцию метро
 //TODO: Указывать дату публикации
+//TODO: Переписать на java.nio.File
 //TODO: Добавить на страницу блок со ссылками на Яндекс, MailRU и прочие стажировки
-//TODO: Запускать и выводить сразу несколько поисковых запросов
-//TODO: Вывести в консоль ссылку на файл, по которой можно перейти

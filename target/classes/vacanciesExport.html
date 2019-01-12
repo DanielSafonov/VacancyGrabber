@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+ <head> 
+  <title>VacancyGrabber</title> 
+  <meta charset="UTF-8"> 
+  <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet"> 
+  <style type="text/css">
+        /* Общие стили */
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            background: #e8e8e8;
+            font-family: 'PT Sans', sans-serif;
+            font-size: 120%;
+            color: #2a3744;
+        }
+
+        /* Шапка сайта */
+        header{
+            display: inline-block;
+            width: 100%;
+            background: #F5F8FA;
+        }
+        header img{
+            width: 100%;
+            max-width: 100px;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            margin-left: 10%;
+            vertical-align:middle
+        }
+        header h1{
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 0.3em;
+        }
+
+        header hr{
+            border: 0.3em solid #2a3744;
+            width: 100%;
+        }
+
+        /*Главный контейнер*/
+        .main-wrapper {
+            width: 80%;
+            height: auto;
+            margin: 0 auto;
+            margin-top: 4em;
+        }
+
+        /* Контейнер блока и секции */
+        .block, .section {
+            background: #F5F8FA;
+            margin: 0 auto;
+            padding: 3em;
+            margin-bottom: 2em;
+            margin-top: 2em;
+        }
+
+        /* Последний блок */
+        .block:last-child {
+            margin-bottom: 4em;
+        }
+
+        /* Заголовок блока */
+        .block h1 {
+            font-weight: 600;
+        }
+
+        /* Подзаголовок - зарплата и название компании */
+        .subheader {
+            font-weight: 300;
+        }
+
+        /* Строчный текст - описание вакансии */
+        .description {
+            margin-top: 1em;
+            text-align: justify;
+            font-size: 105%;
+        }
+
+        /* Секция */
+        .section {
+            border: 0.6em solid #2a3744;
+            padding: 2em;
+        }
+
+        /* Количество найденных по запросу вакансий в секции */
+        .vacancies_count {
+            margin-top: 0.5em;
+            font-size: 120%;
+        }
+
+        /* Строка запроса к каналу данных */
+        .request {
+            font-size: 70%;
+            font-weight: normal;
+            word-wrap: break-word;
+        }
+
+        /* Ссылка на вакансию */
+        .link {
+            color: #2E5F90;
+            padding-top: 1em;
+            text-align: right !important;
+        }
+
+    </style> 
+ </head> 
+ <body> 
+  <header> 
+   <img src="safonovMin.svg"> 
+   <h1>Vacancy Grabber</h1> 
+   <hr> 
+  </header> 
+  <div class="main-wrapper">
+   <div class="vacanciesBlock" id="1"> 
+    <div class="section"> 
+     <h2><span class="channel">HeadHunter: </span><span class="request">/vacancies?area=1&amp;text=java&amp;experience=noExperience&amp;employment=probation&amp;schedule=flexible</span></h2> 
+     <p class="vacancies_count">Найдено вакансий: 11</p> 
+    </div> 
+    <div class="blocks"> 
+     <div class="block" id="1"> 
+      <h1 class="header">Стажер-программист Java</h1> 
+      <h3 class="subheader"><span class="employer">ФакториМаркет</span> | <span class="salary">от 50000 до 100000 RUR до вычета НДФЛ</span></h3> 
+      <p class="description"> <span class="description-text">Работа с сервисной шиной предприятия Tibco ESB. Backend, работа с данными.<br>Базовые знания 
+        <highlighttext>
+          java 
+        </highlighttext> , xml , json. Всему остальному научим.</span> <a class="link" href="https://hh.ru/vacancy/29594818">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="2"> 
+      <h1 class="header">Программист-стажер</h1> 
+      <h3 class="subheader"><span class="employer">ALEXROVICH.RU</span> | <span class="salary">от 25000 RUR на руки</span></h3> 
+      <p class="description"> <span class="description-text">Работа в компании с надежной репутацией, 40 % клиентов пришли к нам по рекомендации. ALEXROVICH.RU - проектная компания, занимающаяся разработкой решений для...<br>Имеет высшее или неоконченное высшее (техническое) образование. Опыт объектно-ориентированного программирования. Способность к самостоятельному обучению на больших объёмах задач. </span> <a class="link" href="https://hh.ru/vacancy/29536090">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="3"> 
+      <h1 class="header">Разработчик ПО</h1> 
+      <h3 class="subheader"><span class="employer">ИнтерТраст</span> | <span class="salary">Не указана</span></h3> 
+      <p class="description"> <span class="description-text">В основном разработка на 
+        <highlighttext>
+          Java 
+        </highlighttext> с использованием различных фреймворков. Также придется работать с реляционными/нереляционными СУБД, использовать другие языки программирования. <br>Для нас не обязательно наличие опыта, мы поддержим стремление к обучению. Но если таковой опыт имеется, это только плюс. </span> <a class="link" href="https://hh.ru/vacancy/29204616">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="4"> 
+      <h1 class="header">Стажер – BI разработчик</h1> 
+      <h3 class="subheader"><span class="employer">СИБУР, Группа компаний</span> | <span class="salary">Не указана</span></h3> 
+      <p class="description"> <span class="description-text">Изучить BI-инструмент Tableau и его возможности. Выступить в роли BI разработчика в одной из функциональных команд и реализовать доработку...<br>Понимание принципов проектирования БД. Опыт программирования (предпочтительно 
+        <highlighttext>
+          Java 
+        </highlighttext>, Python, SQL). Навыки работы с любым BI-инструментом (Power BI, Tableau, Google...</span> <a class="link" href="https://hh.ru/vacancy/29584715">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="5"> 
+      <h1 class="header">Стажер – инженер данных</h1> 
+      <h3 class="subheader"><span class="employer">СИБУР, Группа компаний</span> | <span class="salary">Не указана</span></h3> 
+      <p class="description"> <span class="description-text">Загрузка данных из систем источников в узел данных, обеспечение их доступности. Автоматизация аналитических задач. Создание витрин данных. Интеграция BigData решений...<br>Знание 1 языка программирования (желательно Python или 
+        <highlighttext>
+          Java 
+        </highlighttext>). Навыки проектирования и реализации системы сбора и обработки данных. Умение собирать и...</span> <a class="link" href="https://hh.ru/vacancy/29584806">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="6"> 
+      <h1 class="header">Стажер Java-школы</h1> 
+      <h3 class="subheader"><span class="employer">Сбербанк</span> | <span class="salary">Не указана</span></h3> 
+      <p class="description"> <span class="description-text">Получить предложение стать участником проекта.<br>Студенты старших курсов (4 курс бакалавриата, 5, 6 курс магистратуры, выпускники ВУЗов, специалисты с возможность работать full – time). </span> <a class="link" href="https://hh.ru/vacancy/29437136">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="7"> 
+      <h1 class="header">Стажер-разработчик</h1> 
+      <h3 class="subheader"><span class="employer">ЛАНИТ БиПиЭм</span> | <span class="salary">Не указана</span></h3> 
+      <p class="description"> <span class="description-text">Работать в глобальных проектах оптимизации банковского бизнеса.<br>Взаимодействовать с опытными наставниками и использовать полученные знания на практике. Ты должен уделять работе не менее 35 часов в неделю. </span> <a class="link" href="https://hh.ru/vacancy/29490490">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="8"> 
+      <h1 class="header">Intern Java Developer / Стажер-разработчик</h1> 
+      <h3 class="subheader"><span class="employer">АДВ</span> | <span class="salary">Не указана</span></h3> 
+      <p class="description"> <span class="description-text">Поддержка и развитие компонентов внутренней платформы на 
+        <highlighttext>
+          Java 
+        </highlighttext>. Участие в разработке архитектуры продуктов.<br>Понимание процесса разработки программного обеспечения. Знание Django / Flask; 
+        <highlighttext>
+          Java 
+        </highlighttext>. Умение работать с Git и писать документацию как преимущество. </span> <a class="link" href="https://hh.ru/vacancy/29181147">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="9"> 
+      <h1 class="header">Python-разработчик (стажёр)</h1> 
+      <h3 class="subheader"><span class="employer">GMS Services</span> | <span class="salary">Не указана</span></h3> 
+      <p class="description"> <span class="description-text">Поддержка и развитие компонентов внутренней платформы на 
+        <highlighttext>
+          Java 
+        </highlighttext>. Участие в разработке архитектуры продуктов.<br>Понимание процесса разработки программного обеспечения. Знание Django / Flask; 
+        <highlighttext>
+          Java 
+        </highlighttext>. Умение работать с Git и писать документацию как преимущество. <br>А может даже пробовал использовать Django. - У тебя есть высшее техническое образование (или ты на пути к этому). - </span> <a class="link" href="https://hh.ru/vacancy/29419147">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="10"> 
+      <h1 class="header">Стажер (ИТ-рекрутмент)</h1> 
+      <h3 class="subheader"><span class="employer">GMS Services</span> | <span class="salary">от 20000 RUR до вычета НДФЛ</span></h3> 
+      <p class="description"> <span class="description-text">Научиться говорить с разработчиками на одном языке и понять, например, чем 
+        <highlighttext>
+          java 
+        </highlighttext> отличается от javascript. Изучить и использовать инструментарий продвинутого...<br>Выпускник 2018 года (бакалавриат или магистратура) или студент последних курсов. Английский язык — не ниже intermediate. Желание развиваться в подборе персонала. </span> <a class="link" href="https://hh.ru/vacancy/29362749">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="11"> 
+      <h1 class="header">Стажёр-разработчик</h1> 
+      <h3 class="subheader"><span class="employer">ЛАНИТ БиПиЭм</span> | <span class="salary">Не указана</span></h3> 
+      <p class="description"> <span class="description-text">Работать в глобальных проектах оптимизации банковского бизнеса.<br>Взаимодействовать с опытными наставниками и использовать полученные знания на практике. Ты должен уделять работе не менее 35 часов в неделю. </span> <a class="link" href="https://hh.ru/vacancy/29212539">Подробнее</a> </p> 
+     </div> 
+    </div> 
+   </div>
+  </div>
+ </body>
+</html>

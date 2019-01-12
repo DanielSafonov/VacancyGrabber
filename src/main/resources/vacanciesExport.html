@@ -1,24 +1,50 @@
 <!doctype html>
 <html>
  <head> 
-  <title>Task5</title> 
+  <title>VacancyGrabber</title> 
   <meta charset="UTF-8"> 
-  <link rel="stylesheet" href="css/normalize.css"> 
   <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet"> 
   <style type="text/css">
         /* Общие стили */
-        *{
-            margin:0;padding:0;
+        * {
+            margin: 0;
+            padding: 0;
         }
-        html{
+
+        html {
             background: #e8e8e8;
             font-family: 'PT Sans', sans-serif;
             font-size: 120%;
             color: #2a3744;
         }
 
+        /* Шапка сайта */
+        header{
+            display: inline-block;
+            width: 100%;
+            background: #F5F8FA;
+        }
+        header img{
+            width: 100%;
+            max-width: 100px;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            margin-left: 10%;
+            vertical-align:middle
+        }
+        header h1{
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 0.3em;
+        }
+
+        header hr{
+            border: 0.3em solid #2a3744;
+            width: 100%;
+        }
+
         /*Главный контейнер*/
-        .main-wrapper{
+        .main-wrapper {
             width: 80%;
             height: auto;
             margin: 0 auto;
@@ -26,7 +52,7 @@
         }
 
         /* Контейнер блока и секции */
-        .block, .section{
+        .block, .section {
             background: #F5F8FA;
             margin: 0 auto;
             padding: 3em;
@@ -35,212 +61,140 @@
         }
 
         /* Последний блок */
-        .block:last-child{
+        .block:last-child {
             margin-bottom: 4em;
         }
 
         /* Заголовок блока */
-        .block h1{
+        .block h1 {
             font-weight: 600;
         }
 
         /* Подзаголовок - зарплата и название компании */
-        .subheader{
+        .subheader {
             font-weight: 300;
         }
 
         /* Строчный текст - описание вакансии */
-        .description{
+        .description {
             margin-top: 1em;
             text-align: justify;
             font-size: 105%;
         }
 
-        /* Ссылка перехода на hh для просмотра вакансии */
-        .description .vacancyLink{
-            float: right;
-            color: #0645AD;
-        }
-
         /* Секция */
-        .section{
+        .section {
             border: 0.6em solid #2a3744;
             padding: 2em;
         }
 
         /* Количество найденных по запросу вакансий в секции */
-        .vacancies_count{
+        .vacancies_count {
             margin-top: 0.5em;
             font-size: 120%;
+        }
+
+        /* Строка запроса к каналу данных */
+        .request {
+            font-size: 70%;
+            font-weight: normal;
+            word-wrap: break-word;
+        }
+
+        /* Ссылка на вакансию */
+        .link {
+            color: #2E5F90;
+            padding-top: 1em;
+            text-align: right !important;
         }
 
     </style> 
  </head> 
  <body> 
-  <div class="main-wrapper"> 
-   <div class="section" id="1"> 
-    <h2 class="request">ТЕКСТ ЗАПРОСА</h2> 
-    <p class="vacancies_count">20 вакансий найдено</p> 
-   </div> 
-   <div class="blocks"> 
-    <div class="block" id="1"> 
-     <h1 class="header">Стажер-программист Java</h1> 
-     <h3 class="subheader"><span class="employer"><b>ФакториМаркет</b></span> | <span class="salary">от 50000 до 100000 RUR до вычета НДФЛ</span></h3> 
-     <p class="description"> <span class="description-text">Базовые знания 
-       <highlighttext>
-        java
-       </highlighttext> , xml , json. Всему остальному научим.<br><br>Работа с сервисной шиной предприятия Tibco ESB. Backend, работа с данными.</span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29594818">Подробнее</a> </p> 
+  <header> 
+   <img src="safonovMin.svg"> 
+   <h1>Vacancy Grabber</h1> 
+   <hr> 
+  </header> 
+  <div class="main-wrapper">
+   <div class="vacanciesBlock" id="1"> 
+    <div class="section"> 
+     <h2><span class="channel">HeadHunter: </span><span class="request">/vacancies?area=1&amp;text=c++&amp;experience=noExperience&amp;employment=probation&amp;schedule=flexible</span></h2> 
+     <p class="vacancies_count">Найдено вакансий: 11</p> 
     </div> 
-    <div class="block" id="2"> 
-     <h1 class="header">Программист-стажер</h1> 
-     <h3 class="subheader"><span class="employer"><b>ALEXROVICH.RU</b></span> | <span class="salary">от 25000 RUR на руки</span></h3> 
-     <p class="description"> <span class="description-text">Имеет высшее или неоконченное высшее (техническое) образование. Опыт объектно-ориентированного программирования. Способность к самостоятельному обучению на больших объёмах задач. <br><br>Работа в компании с надежной репутацией, 40 % клиентов пришли к нам по рекомендации. ALEXROVICH.RU - проектная компания, занимающаяся разработкой решений для...</span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29536090">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="3"> 
-     <h1 class="header">Стажер Java</h1> 
-     <h3 class="subheader"><span class="employer"><b>АТОН</b></span> | <span class="salary">Не указана</span></h3> 
-     <p class="description"> <span class="description-text">Студенты старших курсов и выпускники технических вузов. Базовые знания 
-       <highlighttext>
-        Java
-       </highlighttext>. Желание развиваться в области разработки ПО.<br><br>Поддержка интеграционных решений на базе Apache ServiceMix. Участие в разработке спецификаций интеграционных сервисов, форматов взаимодействия с интегрируемыми системами (
-       <highlighttext>
-        Java
-       </highlighttext>).</span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29567445">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="4"> 
-     <h1 class="header">Разработчик ПО</h1> 
-     <h3 class="subheader"><span class="employer"><b>ИнтерТраст</b></span> | <span class="salary">Не указана</span></h3> 
-     <p class="description"> <span class="description-text">Для нас не обязательно наличие опыта, мы поддержим стремление к обучению. Но если таковой опыт имеется, это только плюс. <br><br>В основном разработка на 
-       <highlighttext>
-        Java
-       </highlighttext> с использованием различных фреймворков. Также придется работать с реляционными/нереляционными СУБД, использовать другие языки программирования. </span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29204616">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="5"> 
-     <h1 class="header">Стажер-тестировщик</h1> 
-     <h3 class="subheader"><span class="employer"><b>Aquiva Labs</b></span> | <span class="salary">от 50000 до 70000 RUR до вычета НДФЛ</span></h3> 
-     <p class="description"> <span class="description-text">Базовые навыки программирования (в идеале 
-       <highlighttext>
-        Java
-       </highlighttext>). Разговорный английский, достаточный для того, чтобы понять собеседника, сформулировать свои вопросы и ответить на...<br><br>Работать в паре с опытным тестировщиком на реальном проекте. Анализировать бизнес-требования на наличие неточностей или отсутствие деталей. </span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29299153">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="6"> 
-     <h1 class="header">Стажер-разработчик</h1> 
-     <h3 class="subheader"><span class="employer"><b>TJ Collection</b></span> | <span class="salary">Не указана</span></h3> 
-     <p class="description"> <span class="description-text">Умение применять методы оптимизации SQL запросов, хранимых процедур и функций. Знание Oracle Apex, 
-       <highlighttext>
-        Java
-       </highlighttext>, систем управления версиями (SVN, Git) - желательно.<br><br>Разработка приложений APEX, механизмов интеграции, сервисных служб. Поддержка и доработка существующих приложений и сервисов.</span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29369388">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="7"> 
-     <h1 class="header">Стажер – BI разработчик</h1> 
-     <h3 class="subheader"><span class="employer"><b>СИБУР, Группа компаний</b></span> | <span class="salary">Не указана</span></h3> 
-     <p class="description"> <span class="description-text">Понимание принципов проектирования БД. Опыт программирования (предпочтительно 
-       <highlighttext>
-        Java
-       </highlighttext>, Python, SQL). Навыки работы с любым BI-инструментом (Power BI, Tableau, Google...<br><br>Изучить BI-инструмент Tableau и его возможности. Выступить в роли BI разработчика в одной из функциональных команд и реализовать доработку...</span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29584715">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="8"> 
-     <h1 class="header">Junior Quantitative Analyst / Intern</h1> 
-     <h3 class="subheader"><span class="employer"><b>SOVA CAPITAL LIMITED</b></span> | <span class="salary">Не указана</span></h3> 
-     <p class="description"> <span class="description-text">Strong programming skills (C#, C/C++ or 
-       <highlighttext>
-        Java
-       </highlighttext>) and experience working with data. The ability to work and solve problems...<br><br>Developing tools and platform enhancements to bolster productivity and automation on trading desk. Applying analytical and simulation techniques to analyze...</span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29585302">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="9"> 
-     <h1 class="header">Стажер – инженер данных</h1> 
-     <h3 class="subheader"><span class="employer"><b>СИБУР, Группа компаний</b></span> | <span class="salary">Не указана</span></h3> 
-     <p class="description"> <span class="description-text">Знание 1 языка программирования (желательно Python или 
-       <highlighttext>
-        Java
-       </highlighttext>). Навыки проектирования и реализации системы сбора и обработки данных. Умение собирать и...<br><br>Загрузка данных из систем источников в узел данных, обеспечение их доступности. Автоматизация аналитических задач. Создание витрин данных. Интеграция BigData решений...</span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29584806">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="10"> 
-     <h1 class="header">SAP Cloud platform developer (Internship)</h1> 
-     <h3 class="subheader"><span class="employer"><b>ИБМ Восточная Европа/Азия - IBM EE/A</b></span> | <span class="salary">Не указана</span></h3> 
-     <p class="description"> <span class="description-text">Required Professional and Technical Expertise : Experience with JavaScript(Nodejs), GoLang and/or 
-       <highlighttext>
-        Java
-       </highlighttext> and/or Python. Experience developing in a...<br><br>At IBM we think “open first.” That’s why we’re continuously contributing to new open source projects in every...</span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29584575">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="11"> 
-     <h1 class="header">Младший системный архитектор / Разработчик (стажер)</h1> 
-     <h3 class="subheader"><span class="employer"><b>АйТи</b></span> | <span class="salary">Не указана</span></h3> 
-     <p class="description"> <span class="description-text">формирование базовых навыков общения с бизнес заказчиками для правильного понимания целей проекта. - высшее техническое образование (студент последнего курса). - <br><br>изучение принципов и технологий разработки, используемых в компании на проектах области BPM. - обучение разработке ПО в области BPM. - </span><br><a class="vacancyLink" href="https://hh.ru/vacancy/28289452">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="12"> 
-     <h1 class="header">Младший системный инженер (Стажёр)</h1> 
-     <h3 class="subheader"><span class="employer"><b>Cisco EMEA</b></span> | <span class="salary">Не указана</span></h3> 
-     <p class="description"> <span class="description-text">Бегло говорить на русском и английском языках. Знание и опыт работы с языками программирования. С, С++, С#, 
-       <highlighttext>
-        Java
-       </highlighttext> и Python...<br><br>Что необходимо для участия в программе:</span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29543513">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="13"> 
-     <h1 class="header">Стажер-программист Java</h1> 
-     <h3 class="subheader"><span class="employer"><b>IT studio Arkell</b></span> | <span class="salary">Не указана</span></h3> 
-     <p class="description"> <span class="description-text">Желательно знание 
-       <highlighttext>
-        Java
-       </highlighttext> Core, 
-       <highlighttext>
-        Java
-       </highlighttext> HyperThread, Android SDK. Уверенное понимание принципов ООП. Желателен опыт работы с контролем версий (Git/Mercurial). <br><br>Разработка мобильных приложений на 
-       <highlighttext>
-        Java
-       </highlighttext>. Разработка программного обеспечения для мобильных устройств под управлением Android OS на языках 
-       <highlighttext>
-        Java
-       </highlighttext> и Kotlin. </span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29360464">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="14"> 
-     <h1 class="header">Стажер Java-школы</h1> 
-     <h3 class="subheader"><span class="employer"><b>Сбербанк</b></span> | <span class="salary">Не указана</span></h3> 
-     <p class="description"> <span class="description-text">Студенты старших курсов (4 курс бакалавриата, 5, 6 курс магистратуры, выпускники ВУЗов, специалисты с возможность работать full – time). <br><br>Получить предложение стать участником проекта.</span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29437136">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="15"> 
-     <h1 class="header">Стажер-программист (Java, PHP, C#)</h1> 
-     <h3 class="subheader"><span class="employer"><b>Программный Продукт, ИТ-компания</b></span> | <span class="salary">Не указана</span></h3> 
-     <p class="description"> <span class="description-text">Техническое образование (рассматриваем в том числе студентов). Знание языка SQL. Понимание принципов работы реляционных БД. Уверенный пользователь ПК и офисных...<br><br>Сотрудник будет выступать в роли разработчика-стажера в крупных проектах по автоматизации государственных и коммерческих заказчиков.</span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29491440">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="16"> 
-     <h1 class="header">Стажер-разработчик</h1> 
-     <h3 class="subheader"><span class="employer"><b>ЛАНИТ БиПиЭм</b></span> | <span class="salary">Не указана</span></h3> 
-     <p class="description"> <span class="description-text">Взаимодействовать с опытными наставниками и использовать полученные знания на практике. Ты должен уделять работе не менее 35 часов в неделю. <br><br>Работать в глобальных проектах оптимизации банковского бизнеса.</span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29490490">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="17"> 
-     <h1 class="header">Стажер-разработчик</h1> 
-     <h3 class="subheader"><span class="employer"><b>TeamIdea (ООО ТИМИДЕЯ ГРУПП)</b></span> | <span class="salary">Не указана</span></h3> 
-     <p class="description"> <span class="description-text">Знание минимум одного из языков программирования (
-       <highlighttext>
-        Java
-       </highlighttext>, C++, C#, Python, JavaScript, Delphi/Object Pascal, Ruby, PL/SQL). Высшее техническое или...<br><br>Обучение и профессиональное развитие в области разработок на языке программирования ABAP и сопутствующих технологиях (SAP HANA, SAP SCP, Process Integration). </span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29484958">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="18"> 
-     <h1 class="header">Intern Java Developer / Стажер-разработчик</h1> 
-     <h3 class="subheader"><span class="employer"><b>АДВ</b></span> | <span class="salary">Не указана</span></h3> 
-     <p class="description"> <span class="description-text">Понимание процесса разработки программного обеспечения. Знание Django / Flask; 
-       <highlighttext>
-        Java
-       </highlighttext>. Умение работать с Git и писать документацию как преимущество. <br><br>Поддержка и развитие компонентов внутренней платформы на 
-       <highlighttext>
-        Java
-       </highlighttext>. Участие в разработке архитектуры продуктов.</span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29181147">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="19"> 
-     <h1 class="header">Python-разработчик (стажёр)</h1> 
-     <h3 class="subheader"><span class="employer"><b>GMS Services</b></span> | <span class="salary">Не указана</span></h3> 
-     <p class="description"> <span class="description-text">А может даже пробовал использовать Django. - У тебя есть высшее техническое образование (или ты на пути к этому). - </span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29419147">Подробнее</a> </p> 
-    </div>
-    <div class="block" id="20"> 
-     <h1 class="header">Стажер (ИТ-рекрутмент)</h1> 
-     <h3 class="subheader"><span class="employer"><b>GMS Services</b></span> | <span class="salary">от 20000 RUR до вычета НДФЛ</span></h3> 
-     <p class="description"> <span class="description-text">Выпускник 2018 года (бакалавриат или магистратура) или студент последних курсов. Английский язык — не ниже intermediate. Желание развиваться в подборе персонала. <br><br>Научиться говорить с разработчиками на одном языке и понять, например, чем 
-       <highlighttext>
-        java
-       </highlighttext> отличается от javascript. Изучить и использовать инструментарий продвинутого...</span><br><a class="vacancyLink" href="https://hh.ru/vacancy/29362749">Подробнее</a> </p> 
-    </div>
-   </div> 
-  </div>  
+    <div class="blocks"> 
+     <div class="block" id="1"> 
+      <h1 class="header">Стажёр отдела Performance (Paid Social/ Paid Search)</h1> 
+      <h3 class="subheader"><span class="employer">Айлав</span> | <span class="salary">Не указана</span></h3> 
+      <p class="description"> <span class="description-text">В ведении различных digital-проектов. В подготовке и проведении рекламных кампаний в VK, FB, AdWords, MyTarget и т.д.. <br>Знаешь Microsoft Office на хорошем уровне. Больше технарь, чем гуманитарий :). Опыт работы 
+        <highlighttext>
+          c 
+        </highlighttext> одной из перечисленных систем AdWords, MyTarget, VK...</span> <a class="link" href="https://hh.ru/vacancy/29606984">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="2"> 
+      <h1 class="header">Стажер в департамент по управлению персоналом направления C&amp;B</h1> 
+      <h3 class="subheader"><span class="employer">Tele2</span> | <span class="salary">Не указана</span></h3> 
+      <p class="description"> <span class="description-text">Участие в планировании бюджета и проведении план-фактного анализа затрат в системе бюджетного планирования SAP (структура, внесение данных, выгрузка отчетов). <br>Студенты последних и предпоследних курсов университета. Возможность работать 20-30 часов в неделю. Глубокие знания Excel (формулы, сводные таблицы). </span> <a class="link" href="https://hh.ru/vacancy/29552652">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="3"> 
+      <h1 class="header">Младший консультант/стажер по внедрению бизнес-приложений</h1> 
+      <h3 class="subheader"><span class="employer">КРОК</span> | <span class="salary">Не указана</span></h3> 
+      <p class="description"> <span class="description-text">Участие в проектах по внедрению корпоративных информационных систем. Участие в моделировании, проектировании, тестировании новых бизнес-процессов. Разработка проектной и эксплуатационной...<br>Приветствуется опыт участия в проектах внедрения или поддержки ERP-, CRM- систем, включая 1С, Microsoft Dynamics, OeBS. Английский язык - на...</span> <a class="link" href="https://hh.ru/vacancy/29110229">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="4"> 
+      <h1 class="header">Практикант в отдел бухгалтерии</h1> 
+      <h3 class="subheader"><span class="employer">Капитал Сервис</span> | <span class="salary">Не указана</span></h3> 
+      <p class="description"> <span class="description-text">Работа с первичными бухгалтерскими документами в 1 
+        <highlighttext>
+          C 
+        </highlighttext>.8.3. Подготовка налоговой отчетности. Отчетность юридических лиц и ИП. <br>Хорошее знание ПК . Коммуникабельность. Готовность к обучению и повышению профессионального уровня. Опыт работы не требуется.</span> <a class="link" href="https://hh.ru/vacancy/29512415">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="5"> 
+      <h1 class="header">Практикант в налоговый отдел</h1> 
+      <h3 class="subheader"><span class="employer">Капитал Сервис</span> | <span class="salary">Не указана</span></h3> 
+      <p class="description"> <span class="description-text">Работа с первичными бухгалтерскими документами в 1 
+        <highlighttext>
+          C 
+        </highlighttext>.8.3. Подготовка налоговой отчетности. Сдача отчетности по электронным каналам связи. <br>Хорошее знание ПК . Коммуникабельность. Готовность к обучению и повышению профессионального уровня.</span> <a class="link" href="https://hh.ru/vacancy/29509740">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="6"> 
+      <h1 class="header">Ученик менеджера по продаже автозапчастей</h1> 
+      <h3 class="subheader"><span class="employer">СМАРТБИ.КОМ</span> | <span class="salary">Не указана до 30000 RUR до вычета НДФЛ</span></h3> 
+      <p class="description"> <span class="description-text">Общаться с клиентами в чате и по телефону. Подбирать автозапчасти. Оформлять заказы и контролировать их выполнение.<br>Коммуникабельность, честность, порядочность, желание помочь людям. Грамотная письменная и устная речь. Уверенный пользователь ПК.</span> <a class="link" href="https://hh.ru/vacancy/29505291">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="7"> 
+      <h1 class="header">Стажер департамента IT</h1> 
+      <h3 class="subheader"><span class="employer">OZON.ru</span> | <span class="salary">Не указана</span></h3> 
+      <p class="description"> <span class="description-text">Исследование устройств на протоколе ZigBee (или Bluetooth/Homekit/ZWave). Написание proof-of-concept по управлению устройствами.<br>Имеешь опыт самостоятельной разработки/сборки электронных устройств. Имеешь опыт написания технической документации/статей в блоге ( 
+        <highlighttext>
+          c 
+        </highlighttext> удовольствием почитаем). </span> <a class="link" href="https://hh.ru/vacancy/29437341">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="8"> 
+      <h1 class="header">Стажёр в юридическую дирекцию</h1> 
+      <h3 class="subheader"><span class="employer">Tele2</span> | <span class="salary">Не указана</span></h3> 
+      <p class="description"> <span class="description-text">Подготовка драфтов доверенностей, приказов, контроль их подписания. Заказ печатей, взаимодействие с нотариусом по вопросам заверения подписей и копий документов. <br>Высшее образование/последний курс бакалавриата/студент магистратуры. Аналитический склад ума. Хорошие коммуникационные и презентационные навыки. Умение работать в режиме многозадачности. </span> <a class="link" href="https://hh.ru/vacancy/29379582">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="9"> 
+      <h1 class="header">Стажер-программист 1С</h1> 
+      <h3 class="subheader"><span class="employer">еАптека</span> | <span class="salary">от 20000 RUR на руки</span></h3> 
+      <p class="description"> <span class="description-text">Подготовка драфтов доверенностей, приказов, контроль их подписания. Заказ печатей, взаимодействие с нотариусом по вопросам заверения подписей и копий документов. <br>Высшее образование/последний курс бакалавриата/студент магистратуры. Аналитический склад ума. Хорошие коммуникационные и презентационные навыки. Умение работать в режиме многозадачности. <br>Базовое знание объектов 1 
+        <highlighttext>
+          C 
+        </highlighttext> (документы, справочники, регистры и т.д.). Знание принципов ООП. Начальные навыки программирования на любом языке. </span> <a class="link" href="https://hh.ru/vacancy/29466806">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="10"> 
+      <h1 class="header">Business Development Trainee, Amazing Hiring</h1> 
+      <h3 class="subheader"><span class="employer">GMS Services</span> | <span class="salary">от 20000 RUR до вычета НДФЛ</span></h3> 
+      <p class="description"> <span class="description-text">Команда AmazingHiring разрабатывает одну из лучших в мире платформ для рекрутмента технических кандидатов. Система собирает и оценивает информацию о людях...<br>У тебя очень хороший английский (не ниже upper intermediate).</span> <a class="link" href="https://hh.ru/vacancy/29362835">Подробнее</a> </p> 
+     </div> 
+     <div class="block" id="11"> 
+      <h1 class="header">Стажер в компанию MeetPartners</h1> 
+      <h3 class="subheader"><span class="employer">MeetPartners</span> | <span class="salary">Не указана</span></h3> 
+      <p class="description"> <span class="description-text">Продажи. Клиентский сервис. Маркетинг/PR. Партнерское направление. Event/Project management. Отдел персонала/HR admin. Организация путешествий зарубеж ( Майами, Лондон, Сингапур...<br>Коммуникабельны, общительны. Не боитесь стрессовой работы. Не устаете от общения с людьми и любите людей. У вас грамотная устная и...</span> <a class="link" href="https://hh.ru/vacancy/29267183">Подробнее</a> </p> 
+     </div> 
+    </div> 
+   </div>
+  </div>
  </body>
 </html>
